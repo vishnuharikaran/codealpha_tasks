@@ -1,0 +1,5 @@
+Welcome to the CodeAlpha Task Automation project.
+This sample text file contains general information and contact references.
+For inquiries, feel free to reach out to support@example.com or info@company.org.
+You can also contact john.doe@techcorp.io for technical assistance.
+Thank you for using our email extraction automation tool.
