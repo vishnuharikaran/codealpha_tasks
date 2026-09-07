@@ -28,19 +28,31 @@ def extract_emails(text_content):
     return extracted_emails
 
 
-def display_extracted_emails(extracted_emails):
-    """Display the list of extracted email addresses and total count."""
+def remove_duplicates(email_list):
+    """Remove duplicate email addresses while preserving original appearance order."""
+    unique_emails = []
+    for email in email_list:
+        if email not in unique_emails:
+            unique_emails.append(email)
+    return unique_emails
+
+
+def display_extracted_emails(all_emails, unique_emails):
+    """Display the list of unique extracted email addresses and match statistics."""
     print("\nExtracted Email Addresses:")
     print("-" * 50)
 
-    if not extracted_emails:
+    if not unique_emails:
         print("No email addresses found.")
+        print("-" * 50)
+        print("Total emails found: 0")
     else:
-        for email in extracted_emails:
+        for email in unique_emails:
             print(email)
 
-    print("-" * 50)
-    print(f"Total emails found: {len(extracted_emails)}")
+        print("-" * 50)
+        print(f"Total email matches found: {len(all_emails)}")
+        print(f"Total unique emails found: {len(unique_emails)}")
 
 
 def main():
@@ -59,14 +71,18 @@ def main():
         print(file_content.strip())
         print("-" * 50)
 
-        # Step 2: Extract email addresses (Phase 3)
-        emails = extract_emails(file_content)
+        # Step 2: Extract email addresses
+        all_emails = extract_emails(file_content)
 
-        # Step 3: Display results
-        display_extracted_emails(emails)
+        # Step 3: Remove duplicates preserving order (Phase 4)
+        unique_emails = remove_duplicates(all_emails)
+
+        # Step 4: Display results
+        display_extracted_emails(all_emails, unique_emails)
 
 
 if __name__ == "__main__":
     main()
+
 
 
