@@ -12,8 +12,16 @@ def get_chatbot_response(user_message):
     # Match user input against predefined rules
     if cleaned_message == "hello":
         return "Hi!"
+    elif cleaned_message in ["hi", "hey"]:
+        return "Hello!"
     elif cleaned_message == "how are you":
         return "I'm fine, thanks!"
+    elif cleaned_message in ["what is your name", "who are you"]:
+        return "I'm a simple Python chatbot!"
+    elif cleaned_message == "help":
+        return "You can say hello, ask how I am, ask my name, or type bye to exit."
+    elif cleaned_message in ["thanks", "thank you"]:
+        return "You're welcome!"
     elif cleaned_message == "bye":
         return "Goodbye!"
     else:
