@@ -55,6 +55,23 @@ def display_extracted_emails(all_emails, unique_emails):
         print(f"Total unique emails found: {len(unique_emails)}")
 
 
+def save_emails_to_file(email_list, filename="extracted_emails.txt"):
+    """Save unique email addresses to a text file with error handling."""
+    if not email_list:
+        print("\nNo email addresses found. Output file was not created.")
+        return False
+
+    try:
+        with open(filename, mode="w", encoding="utf-8") as file:
+            for email in email_list:
+                file.write(f"{email}\n")
+        print(f"\nEmails successfully saved to {filename}")
+        return True
+    except Exception as error:
+        print(f"\nError saving emails to '{filename}': {error}")
+        return False
+
+
 def main():
     """Main entry point for the Email Address Extractor application."""
     print("=" * 50)
@@ -74,15 +91,19 @@ def main():
         # Step 2: Extract email addresses
         all_emails = extract_emails(file_content)
 
-        # Step 3: Remove duplicates preserving order (Phase 4)
+        # Step 3: Remove duplicates preserving order
         unique_emails = remove_duplicates(all_emails)
 
         # Step 4: Display results
         display_extracted_emails(all_emails, unique_emails)
 
+        # Step 5: Save unique email addresses to output file (Phase 5)
+        save_emails_to_file(unique_emails, "extracted_emails.txt")
+
 
 if __name__ == "__main__":
     main()
+
 
 
 
