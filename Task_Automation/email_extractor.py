@@ -1,7 +1,8 @@
-"""
-CodeAlpha - Task Automation: Email Address Extractor
-An automated script to extract email addresses from text files using Python 3.
-"""
+import re
+
+# Simple and readable regex pattern to match email addresses
+# Matches: username @ domain . top-level-domain
+EMAIL_REGEX = r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
 
 
 def read_input_file(filename="input.txt"):
@@ -19,6 +20,29 @@ def read_input_file(filename="input.txt"):
         return None
 
 
+def extract_emails(text_content):
+    """Extract all email addresses from text content using regular expressions."""
+    if not text_content:
+        return []
+    extracted_emails = re.findall(EMAIL_REGEX, text_content)
+    return extracted_emails
+
+
+def display_extracted_emails(extracted_emails):
+    """Display the list of extracted email addresses and total count."""
+    print("\nExtracted Email Addresses:")
+    print("-" * 50)
+
+    if not extracted_emails:
+        print("No email addresses found.")
+    else:
+        for email in extracted_emails:
+            print(email)
+
+    print("-" * 50)
+    print(f"Total emails found: {len(extracted_emails)}")
+
+
 def main():
     """Main entry point for the Email Address Extractor application."""
     print("=" * 50)
@@ -26,7 +50,7 @@ def main():
     print("=" * 50)
     print()
 
-    # Read input file contents (Phase 2)
+    # Step 1: Read input file contents
     file_content = read_input_file("input.txt")
 
     if file_content is not None:
@@ -34,9 +58,15 @@ def main():
         print("-" * 50)
         print(file_content.strip())
         print("-" * 50)
-        print("\nEmail extraction will be implemented in the next phase.\n")
+
+        # Step 2: Extract email addresses (Phase 3)
+        emails = extract_emails(file_content)
+
+        # Step 3: Display results
+        display_extracted_emails(emails)
 
 
 if __name__ == "__main__":
     main()
+
 
