@@ -1,3 +1,8 @@
+"""
+CodeAlpha - Task Automation: Email Address Extractor
+An automated script to extract email addresses from text files using Python 3.
+"""
+
 import re
 
 # Simple and readable regex pattern to match email addresses
@@ -6,7 +11,7 @@ EMAIL_REGEX = r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
 
 
 def read_input_file(filename="input.txt"):
-    """Read and return the text content of the specified file with error handling."""
+    """Read and return text content from specified file with comprehensive error handling."""
     print(f"Reading {filename}...\n")
     try:
         with open(filename, mode="r", encoding="utf-8") as file:
@@ -14,6 +19,9 @@ def read_input_file(filename="input.txt"):
             return file_content
     except FileNotFoundError:
         print(f"Error: The file '{filename}' was not found. Please check the file path.")
+        return None
+    except PermissionError:
+        print(f"Error: Permission denied. Unable to read '{filename}'.")
         return None
     except Exception as error:
         print(f"Error reading file '{filename}': {error}")
@@ -56,7 +64,7 @@ def display_extracted_emails(all_emails, unique_emails):
 
 
 def save_emails_to_file(email_list, filename="extracted_emails.txt"):
-    """Save unique email addresses to a text file with error handling."""
+    """Save unique email addresses to a text file with robust error handling."""
     if not email_list:
         print("\nNo email addresses found. Output file was not created.")
         return False
@@ -67,6 +75,9 @@ def save_emails_to_file(email_list, filename="extracted_emails.txt"):
                 file.write(f"{email}\n")
         print(f"\nEmails successfully saved to {filename}")
         return True
+    except PermissionError:
+        print(f"\nError: Permission denied. Unable to write to '{filename}'.")
+        return False
     except Exception as error:
         print(f"\nError saving emails to '{filename}': {error}")
         return False
@@ -82,27 +93,35 @@ def main():
     # Step 1: Read input file contents
     file_content = read_input_file("input.txt")
 
-    if file_content is not None:
-        print("File Contents:")
-        print("-" * 50)
-        print(file_content.strip())
-        print("-" * 50)
+    if file_content is None:
+        return
 
-        # Step 2: Extract email addresses
-        all_emails = extract_emails(file_content)
+    # Step 2: Check whether input file is empty
+    if not file_content.strip():
+        print("input.txt is empty. No emails to extract.")
+        return
 
-        # Step 3: Remove duplicates preserving order
-        unique_emails = remove_duplicates(all_emails)
+    print("File Contents:")
+    print("-" * 50)
+    print(file_content.strip())
+    print("-" * 50)
 
-        # Step 4: Display results
-        display_extracted_emails(all_emails, unique_emails)
+    # Step 3: Extract email addresses
+    all_emails = extract_emails(file_content)
 
-        # Step 5: Save unique email addresses to output file (Phase 5)
-        save_emails_to_file(unique_emails, "extracted_emails.txt")
+    # Step 4: Check whether emails were found and remove duplicates
+    unique_emails = remove_duplicates(all_emails)
+
+    # Step 5: Display results
+    display_extracted_emails(all_emails, unique_emails)
+
+    # Step 6: Save unique email addresses to output file
+    save_emails_to_file(unique_emails, "extracted_emails.txt")
 
 
 if __name__ == "__main__":
     main()
+
 
 
 
