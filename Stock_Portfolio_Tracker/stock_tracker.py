@@ -24,36 +24,41 @@ def display_available_stocks():
 
 
 def build_portfolio():
-    """Interactively build a portfolio dictionary from user input."""
+    """Interactively build a portfolio dictionary from user input with strict validation."""
     portfolio = {}
 
     while True:
-        try:
-            symbol = input("\nEnter a stock symbol to add (e.g., AAPL): ").strip().upper()
-        except (EOFError, KeyboardInterrupt):
-            print("\nPortfolio entry cancelled.")
-            break
+        # Step 1: Stock Symbol Input & Validation
+        symbol = ""
+        while True:
+            try:
+                symbol = input("\nEnter stock symbol: ").strip().upper()
+            except (EOFError, KeyboardInterrupt):
+                print("\nPortfolio entry cancelled.")
+                return portfolio
 
-        # Validate symbol against available stock price dictionary
-        if symbol not in STOCK_PRICES:
-            print(f"Invalid symbol '{symbol}'! Please choose from the available stock list.")
-            continue
+            if symbol in STOCK_PRICES:
+                break
+            else:
+                print("Invalid stock symbol. Please choose from the available stocks.")
 
-        # Get valid integer quantity from user
-        try:
-            quantity_input = input(f"Enter quantity of shares for {symbol}: ").strip()
-            quantity = int(quantity_input)
-            if quantity <= 0:
-                print("Quantity must be a positive integer greater than 0.")
-                continue
-        except ValueError:
-            print("Invalid input! Please enter a valid number for quantity.")
-            continue
-        except (EOFError, KeyboardInterrupt):
-            print("\nPortfolio entry cancelled.")
-            break
+        # Step 2: Quantity Input & Validation
+        quantity = 0
+        while True:
+            try:
+                quantity_input = input(f"Enter quantity for {symbol}: ").strip()
+                quantity = int(quantity_input)
+                if quantity <= 0:
+                    print("Quantity must be greater than zero.")
+                else:
+                    break
+            except ValueError:
+                print("Invalid input. Please enter a valid whole number.")
+            except (EOFError, KeyboardInterrupt):
+                print("\nPortfolio entry cancelled.")
+                return portfolio
 
-        # Combine quantity if stock already exists in portfolio, otherwise add new key
+        # Combine or store stock quantity
         if symbol in portfolio:
             portfolio[symbol] += quantity
             print(f"Added {quantity} more shares of {symbol}. Total shares: {portfolio[symbol]}")
@@ -61,13 +66,24 @@ def build_portfolio():
             portfolio[symbol] = quantity
             print(f"Added {quantity} shares of {symbol} to your portfolio.")
 
-        # Ask if user wants to add another stock
-        try:
-            again = input("\nWould you like to add another stock? (yes/no): ").strip().lower()
-        except (EOFError, KeyboardInterrupt):
-            again = "no"
+        # Step 3: Add Another Stock Confirmation & Validation
+        add_more = False
+        while True:
+            try:
+                again = input("\nWould you like to add another stock? (yes/no): ").strip().lower()
+            except (EOFError, KeyboardInterrupt):
+                again = "no"
 
-        if again not in ["yes", "y"]:
+            if again in ["yes", "y"]:
+                add_more = True
+                break
+            elif again in ["no", "n"]:
+                add_more = False
+                break
+            else:
+                print("Invalid response. Please enter 'yes' or 'no'.")
+
+        if not add_more:
             break
 
     return portfolio
