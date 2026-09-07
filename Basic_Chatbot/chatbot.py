@@ -6,8 +6,12 @@ A simple rule-based console chatbot built with Python 3.
 
 def get_chatbot_response(user_message):
     """Return a predefined response based on rule-based if-elif-else matching."""
-    # Convert message to lowercase and remove surrounding whitespace
+    # Convert message to lowercase and remove leading/trailing whitespace
     cleaned_message = user_message.strip().lower()
+
+    # Handle empty input (pressing Enter without typing)
+    if not cleaned_message:
+        return "Please enter a message."
 
     # Match user input against predefined rules
     if cleaned_message == "hello":
@@ -25,7 +29,7 @@ def get_chatbot_response(user_message):
     elif cleaned_message == "bye":
         return "Goodbye!"
     else:
-        return "I'm sorry, I don't understand that."
+        return "I'm sorry, I don't understand that. Type 'help' to see what you can ask me."
 
 
 def main():
