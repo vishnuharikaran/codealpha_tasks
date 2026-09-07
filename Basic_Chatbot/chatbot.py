@@ -4,16 +4,16 @@ A simple rule-based console chatbot built with Python 3.
 """
 
 
-def get_chatbot_response(user_message):
-    """Return a predefined response based on rule-based if-elif-else matching."""
-    # Convert message to lowercase and remove leading/trailing whitespace
+def get_response(user_message):
+    """Process user message and return appropriate rule-based response."""
+    # Remove leading/trailing whitespace and convert to lowercase
     cleaned_message = user_message.strip().lower()
 
-    # Handle empty input (pressing Enter without typing)
+    # Handle empty input
     if not cleaned_message:
         return "Please enter a message."
 
-    # Match user input against predefined rules
+    # Match user input against predefined conversation rules
     if cleaned_message == "hello":
         return "Hi!"
     elif cleaned_message in ["hi", "hey"]:
@@ -32,14 +32,14 @@ def get_chatbot_response(user_message):
         return "I'm sorry, I don't understand that. Type 'help' to see what you can ask me."
 
 
-def main():
-    """Main entry point managing continuous conversation loop."""
+def start_chatbot():
+    """Display welcome header and run the continuous conversation loop."""
     print("=" * 45)
     print("        WELCOME TO THE BASIC CHATBOT!        ")
     print("=" * 45)
     print("Type 'bye' to end the conversation.\n")
 
-    # Continuous conversation loop (Phase 3)
+    # Continuous conversation loop
     while True:
         try:
             user_input = input("You: ")
@@ -47,16 +47,17 @@ def main():
             print("\nChatbot: Goodbye!")
             break
 
-        # Generate response using rule-based helper
-        bot_response = get_chatbot_response(user_input)
-        print(f"Chatbot: {bot_response}\n")
+        # Process user input and display chatbot response
+        response = get_response(user_input)
+        print(f"Chatbot: {response}\n")
 
-        # Exit loop if user said bye
+        # Terminate conversation if user entered 'bye'
         if user_input.strip().lower() == "bye":
             break
 
 
 if __name__ == "__main__":
-    main()
+    start_chatbot()
+
 
 
