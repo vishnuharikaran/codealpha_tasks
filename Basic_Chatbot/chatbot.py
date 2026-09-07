@@ -21,22 +21,30 @@ def get_chatbot_response(user_message):
 
 
 def main():
-    """Main entry point for the Basic Chatbot application."""
+    """Main entry point managing continuous conversation loop."""
     print("=" * 45)
-    print("           WELCOME TO BASIC CHATBOT          ")
+    print("        WELCOME TO THE BASIC CHATBOT!        ")
     print("=" * 45)
+    print("Type 'bye' to end the conversation.\n")
 
-    try:
-        user_input = input("\nYou: ")
-    except (EOFError, KeyboardInterrupt):
-        print("\nGoodbye!")
-        return
+    # Continuous conversation loop (Phase 3)
+    while True:
+        try:
+            user_input = input("You: ")
+        except (EOFError, KeyboardInterrupt):
+            print("\nChatbot: Goodbye!")
+            break
 
-    # Process user input and print chatbot response
-    bot_response = get_chatbot_response(user_input)
-    print(f"Chatbot: {bot_response}")
+        # Generate response using rule-based helper
+        bot_response = get_chatbot_response(user_input)
+        print(f"Chatbot: {bot_response}\n")
+
+        # Exit loop if user said bye
+        if user_input.strip().lower() == "bye":
+            break
 
 
 if __name__ == "__main__":
     main()
+
 
