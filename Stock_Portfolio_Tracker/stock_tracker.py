@@ -3,6 +3,8 @@ CodeAlpha - Stock Portfolio Tracker
 A simple console-based Stock Portfolio Tracker built with Python 3.
 """
 
+import csv
+
 # Hardcoded dictionary containing stock symbols and their fixed market prices
 STOCK_PRICES = {
     "AAPL": 180.50,
@@ -118,6 +120,58 @@ def display_portfolio_summary(portfolio):
     print("=" * 45)
 
 
+def export_portfolio_to_csv(portfolio, filename="portfolio.csv"):
+    """Export portfolio details and total investment value to a CSV file."""
+    if not portfolio:
+        print("Portfolio is empty. Nothing to save.")
+        return
+
+    try:
+        with open(filename, mode="w", newline="", encoding="utf-8") as csv_file:
+            writer = csv.writer(csv_file)
+
+            # Write header row
+            writer.writerow(["Stock Symbol", "Price per Share", "Quantity", "Investment Value"])
+
+            total_portfolio_value = 0.0
+
+            # Write stock data rows
+            for symbol, quantity in portfolio.items():
+                price = STOCK_PRICES[symbol]
+                stock_value = price * quantity
+                total_portfolio_value += stock_value
+                writer.writerow([symbol, price, quantity, stock_value])
+
+            # Write total portfolio value row
+            writer.writerow(["Total Portfolio Value", "", "", total_portfolio_value])
+
+        print(f"\nPortfolio saved successfully to {filename}")
+
+    except Exception as error:
+        print(f"\nError saving portfolio to CSV: {error}")
+
+
+def prompt_export_option(portfolio):
+    """Prompt the user whether to save portfolio to a CSV file with validation."""
+    if not portfolio:
+        return
+
+    while True:
+        try:
+            choice = input("\nDo you want to save your portfolio to a CSV file? (yes/no): ").strip().lower()
+        except (EOFError, KeyboardInterrupt):
+            choice = "no"
+
+        if choice in ["yes", "y"]:
+            export_portfolio_to_csv(portfolio)
+            break
+        elif choice in ["no", "n"]:
+            print("\nPortfolio was not saved.")
+            break
+        else:
+            print("Invalid response. Please enter 'yes' or 'no'.")
+
+
 def main():
     """Main entry point for the Stock Portfolio Tracker application."""
     print("=" * 45)
@@ -130,12 +184,16 @@ def main():
     # Build user portfolio
     user_portfolio = build_portfolio()
 
-    # Calculate and display portfolio summary (Phase 4)
+    # Calculate and display portfolio summary
     display_portfolio_summary(user_portfolio)
+
+    # Phase 6: Save to CSV option
+    prompt_export_option(user_portfolio)
 
 
 if __name__ == "__main__":
     main()
+
 
 
 
